@@ -1,193 +1,106 @@
 import 'package:flutter/material.dart';
+import 'flower_details_page.dart';
+import 'login_page.dart';
 
-import 'flower_data.dart';
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
-import 'dart:math';
-
-class FlowerHome extends StatefulWidget {
-
-  const FlowerHome({super.key});
-
-  @override
-
-  State<FlowerHome> createState() => _FlowerHomeState();
-
-}
-
-class _FlowerHomeState extends State<FlowerHome> {
-
-  int currentIndex = 0;
-
-  void nextFlower() {
-
-    setState(() {
-
-      currentIndex = Random().nextInt(flowers.length);
-
-    });
-
-  }
-
-  void showFlowerInfo(String flowerName, String flowerInfo) {
-
-    showDialog(
-
-      context: context,
-
-      builder: (context) {
-
-        return AlertDialog(
-
-          title: Text(flowerName),
-
-          content: Text(flowerInfo),
-
-          actions: [
-
-            TextButton(
-
-                onPressed: () => Navigator.pop(context),
-
-                child: const Text("Close"))
-
-          ],
-
-        );
-
-      },
-
-    );
-
+  void _onMenuSelected(BuildContext context, String value) {
+    if (value == 'home') {
+      return;
+    } else if (value == 'details') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const FlowerDetailsPage()),
+      );
+    }
   }
 
   @override
-
   Widget build(BuildContext context) {
-
-    final flower = flowers[currentIndex];
-
-
-
     return Scaffold(
-
       appBar: AppBar(
-
-        title: const Text('Flower of the Day'),
-
+        backgroundColor: Colors.pink[50],
+        elevation: 4,
         centerTitle: true,
+        title: const Text(
+          '🌸 Flower of the Day 🌸',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Cursive',
+            color: Colors.deepPurple,
+            letterSpacing: 1.5,
+          ),
+        ),
+        actions:[
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            },
+            child: const Text(
+              'LOGIN',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+            ),
+          ),
 
+          PopupMenuButton<String>(
+            onSelected: (value) => _onMenuSelected(context, value),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'home', child: Text('Home')),
+              PopupMenuItem(value: 'details', child: Text('Flower Details')),
+            ],
+          ),
+        ],
       ),
 
       body: Center(
-
         child: Padding(
-
           padding: const EdgeInsets.all(24.0),
-
-          child: Column(
-
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            children: [
-
-              Image.asset(flower.imagePath, width: 350, height: 250),
-
-
-
-              const SizedBox(height: 20),
-
-
-
-              // Row: Flower Name + Info Icon
-
-              Row(
-
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-
+          child: Card(
+            color: Colors.pink[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
                   Text(
-
-                    flower.name,
-
-                    style: const TextStyle(
-
-                        fontSize: 28, fontWeight: FontWeight.bold),
-
+                    '🌸 Welcome to Flower of the Day 🌸',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                    ),
                   ),
-
-                  const SizedBox(width: 10),
-
-
-
-                  // INFO BUTTON
-
-                  IconButton(
-
-                    icon: const Icon(Icons.info_outline, size: 28),
-
-                    onPressed: () {
-
-                      showFlowerInfo(
-
-                        flower.name,
-
-                        flower.description, // <-- your extra info here
-
-                      );
-
-                    },
-
+                  SizedBox(height: 16),
+                  Text(
+                    'Each day brings a new bloom, a gentle quote, '
+                        'and a touch of meaning to brighten your journey.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      height: 1.4,
+                      color: Colors.black87,
+                    ),
                   ),
-
+                  SizedBox(height: 24),
                 ],
-
               ),
-
-
-
-              const SizedBox(height: 15),
-
-
-
-              Text(
-
-                '\"${flower.quote}\"',
-
-                textAlign: TextAlign.center,
-
-                style: const TextStyle(
-
-                    fontSize: 20, fontStyle: FontStyle.italic),
-
-              ),
-
-
-
-              const SizedBox(height: 30),
-
-
-
-              ElevatedButton(
-
-                onPressed: nextFlower,
-
-                child: const Text('Next Flower & Quote',
-
-                    style: TextStyle(fontSize: 18)),
-
-              ),
-
-            ],
-
+            ),
           ),
-
         ),
-
       ),
-
     );
-
   }
-
 }
